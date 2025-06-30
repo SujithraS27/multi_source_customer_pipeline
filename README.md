@@ -47,4 +47,10 @@ A public dataset containing real orders, products, payments, and customer inform
 
 - Explored basic info for each DataFrame with `.info()` to check data types and null counts.
 - Used `.describe()` to understand numeric columns and basic stats.
-- Identified potential nulls and duplicate rows to clean in the next step.
+- Checked for missing values in `orders`:
+  - `order_approved_at`: 160 nulls
+  - `order_delivered_carrier_date`: 1,783 nulls
+  - `order_delivered_customer_date`: 2,965 nulls
+- Confirmed `customers` and `order_items` have no missing values.
+- Checked for duplicate rows in all three datasets using `.duplicated().sum()` — found **0 duplicates**.
+
