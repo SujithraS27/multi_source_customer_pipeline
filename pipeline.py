@@ -8,5 +8,11 @@ print(orders.info());
 print(order_items.head());
 print(order_items.info());
 print(customers.head());
-print(customers.info());
-
+print(customers.info())
+print(orders.isnull().sum())
+print(order_items.isnull().sum())
+print(customers.isnull().sum())
+print(orders.duplicated().sum())
+print(customers.duplicated().sum())
+print(order_items.duplicated().sum())
+print(orders.describe())
