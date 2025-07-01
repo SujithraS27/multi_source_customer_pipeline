@@ -54,3 +54,12 @@ A public dataset containing real orders, products, payments, and customer inform
 - Confirmed `customers` and `order_items` have no missing values.
 - Checked for duplicate rows in all three datasets using `.duplicated().sum()` — found **0 duplicates**.
 
+---
+
+### ✔️ 3. Clean
+
+- Added `delivery_status` flag to `orders` to mark delivered vs. cancelled/pending.
+- Kept meaningful NULLs in `order_approved_at` and `order_delivered_carrier_date` because they reflect the true state of each order.
+- Verified no duplicates.
+- Saved all cleaned files to `/silver/` layer.
+
