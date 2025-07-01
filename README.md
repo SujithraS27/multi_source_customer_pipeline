@@ -60,6 +60,10 @@ A public dataset containing real orders, products, payments, and customer inform
 
 - Added `delivery_status` flag to `orders` to mark delivered vs. cancelled/pending.
 - Kept meaningful NULLs in `order_approved_at` and `order_delivered_carrier_date` because they reflect the true state of each order.
-- Verified no duplicates.
-- Saved all cleaned files to `/silver/` layer.
+- Verified no duplicate rows in `orders`, `customers`, and `order_items`.
+- Converted all timestamp columns (`order_purchase_timestamp`, `order_approved_at`, `order_delivered_carrier_date`, etc.) to `datetime64[ns]` datatype in Pandas.
+  - This ensures correct date-based filtering, sorting, and consistent loading into SQL `DATETIME` fields.
+- Kept `customer_id` and other IDs as `object` type because they are alphanumeric keys, mapping to `VARCHAR` in SQL.
+- Saved all cleaned files to `/silver/` layer with the correct datatypes for smooth loading into the database.
+
 
