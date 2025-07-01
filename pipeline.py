@@ -32,3 +32,37 @@ print(order_items.dtypes)
 orders.to_csv("E:/DE PROJECT/multi_source_customer_pipeline/silver/orders_cleaned.csv", index=False)
 customers.to_csv("E:/DE PROJECT/multi_source_customer_pipeline/silver/customers.csv", index=False)
 order_items.to_csv("E:/DE PROJECT/multi_source_customer_pipeline/silver/order_items.csv", index=False)
+
+#CONNECTING SQL FROM PYTHON
+
+import pandas as pd
+import mysql.connector
+
+# 1. Load cleaned CSV
+orders = pd.read_csv(r"E:/DE PROJECT/multi_source_customer_pipeline/silver/orders_cleaned.csv")
+
+
+# 2. Connect to MySQL
+conn = mysql.connector.connect(
+    host="localhost",
+    user="root",
+    password="root",
+    database="olist_db"
+)
+cursor = conn.cursor()
+
+# 3. Loop through rows and insert
+for _, row in orders.iterrows():
+    row = row.where(pd.notnull(row), None)
+    sql = """
+    INSERT INTO orders
+    (order_id, customer_id, order_status, order_purchase_timestamp, order_approved_at,
+     order_delivered_carrier_date, order_delivered_customer_date,
+     order_estimated_delivery_date, delivery_status)
+    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+    """
+    values = tuple(row)
+    cursor.execute(sql, values)
+
+conn.commit()
+conn.close()

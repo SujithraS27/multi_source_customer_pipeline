@@ -66,4 +66,14 @@ A public dataset containing real orders, products, payments, and customer inform
 - Kept `customer_id` and other IDs as `object` type because they are alphanumeric keys, mapping to `VARCHAR` in SQL.
 - Saved all cleaned files to `/silver/` layer with the correct datatypes for smooth loading into the database.
 
+---
 
+### ✔️ 4. Load to MySQL
+
+- Created **`olist_db`** database in MySQL and created tables for `orders`, `customers`, and `order_items` with appropriate datatypes (`VARCHAR`, `DATETIME`, `INT`).
+- Wrote Python `pipeline.py` code to **connect to MySQL** using `mysql.connector` and insert rows.
+- Used **row-wise insert** logic with `iterrows()` to iterate over DataFrames and insert each record safely.
+- Applied `row.where(pd.notnull(row), None)` to replace any Pandas `NaN` values with Python `None`, ensuring MySQL stores them as `NULL` and avoids `'nan'` string errors.
+- Verified successful row counts in MySQL match the `/silver/` cleaned CSVs.
+
+---
