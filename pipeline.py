@@ -35,7 +35,6 @@ order_items.to_csv("E:/DE PROJECT/multi_source_customer_pipeline/silver/order_it
 
 #CONNECTING SQL FROM PYTHON
 
-import pandas as pd
 import mysql.connector
 
 # 1. Load cleaned CSV
