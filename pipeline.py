@@ -63,6 +63,32 @@ for _, row in orders.iterrows():
     """
     values = tuple(row)
     cursor.execute(sql, values)
+print("Orders insert done.")
+
+for _, row in customers.iterrows():
+    row = row.where(pd.notnull(row), None)
+    sql = """
+    INSERT INTO customers
+    (customer_id, customer_unique_id, customer_zip_code_prefix,
+     customer_city, customer_state)
+    VALUES (%s, %s, %s, %s, %s)
+    """
+    values = tuple(row)
+    cursor.execute(sql, values)
+print("Customers insert done.")
+
+for _, row in order_items.iterrows():
+    row = row.where(pd.notnull(row), None)
+    sql = """
+    INSERT INTO order_items
+    (order_id, order_item_id, product_id, seller_id,
+     shipping_limit_date, price, freight_value)
+    VALUES (%s, %s, %s, %s, %s, %s, %s)
+    """
+    values = tuple(row)
+    cursor.execute(sql, values)
+print("Order_items insert done.")
+
 
 conn.commit()
 conn.close()
