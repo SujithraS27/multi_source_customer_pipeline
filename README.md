@@ -77,3 +77,69 @@ A public dataset containing real orders, products, payments, and customer inform
 - Verified successful row counts in MySQL match the `/silver/` cleaned CSVs.
 
 ---
+
+### ✅ 5. Gold Layer: Summary Tables
+
+- Created:
+  - **`customer_summary`**: total orders, total spend, first & last order date per customer.
+  - **`monthly_orders_summary`**: total orders & revenue by year-month.
+  - **`product_summary`**: total items sold & revenue per product.
+  - **`delivery_performance`**: average delivery days per month.
+- Used backticks (`) for column names that might conflict with reserved words.
+- Ensured `GROUP BY` clauses align with aggregate fields.
+
+Example:
+```sql
+CREATE TABLE `monthly_orders_summary` AS
+SELECT
+  DATE_FORMAT(order_purchase_timestamp, '%Y-%m') AS `year_month`,
+  COUNT(DISTINCT o.order_id) AS `total_orders`,
+  SUM(oi.price) AS `total_revenue`
+FROM `orders` o
+JOIN `order_items` oi ON o.order_id = oi.order_id
+GROUP BY DATE_FORMAT(order_purchase_timestamp, '%Y-%m`);
+```
+
+---
+
+### ✅ 6. Testing & Validation
+
+- Ran `pipeline.py` end-to-end after loading cleaned CSVs.
+- Verified that all **Silver Layer tables** (`orders`, `customers`, `order_items`) were populated correctly in MySQL.
+- Checked row counts in MySQL match the original cleaned CSVs.
+- Validated that **Gold Layer summary tables** (`customer_summary`, `monthly_orders_summary`, `product_summary`, `delivery_performance`) are created with correct aggregate results.
+- Confirmed that `NULL` values are handled as expected — no `'nan'` strings appear.
+- Used MySQL CLI or GUI tools to run `SELECT *` queries to inspect the final data.
+- Verified no leftover open connections — `cursor` and `conn` are closed gracefully at the end of the script.
+- Ensured no syntax errors remain (used backticks for reserved keywords if needed).
+
+---
+
+### ✅ 7. Conclusion
+
+This project demonstrates a complete **ETL pipeline** for customer and order data, starting from raw CSVs, performing data cleaning, transforming into curated Silver Layer datasets, and loading summarized insights into a **MySQL data warehouse**.
+
+**Key Outcomes:**
+- Clean, consistent, and validated data ready for downstream analytics.
+- Silver and Gold Layer tables designed for easy reporting.
+- Reproducible Python pipeline with best practices for null handling and database inserts.
+- Solid foundation for adding orchestration, monitoring, and BI dashboards.
+
+**Future Enhanacements:**
+- Automate the pipeline using a scheduler like **Apache Airflow**.
+- Add monitoring and logging for production.
+- Connect **BI tools** (Tableau, Power BI) to create dynamic dashboards.
+
+---
+
+## 📚 8. Learnings
+
+- Learned how to build an end-to-end **data pipeline** using Python, Pandas, and MySQL.
+- Understood how to handle **missing values** and maintain data quality during transformation.
+- Practiced writing efficient **SQL** for creating summary tables.
+- Gained experience in **loading data into relational databases** using Python.
+- Understood the importance of **Silver and Gold Layer architecture** for scalable analytics.
+
+---
+
+> ✅ *Project successfully tested and deployed locally. Ready for future enhancements!*
